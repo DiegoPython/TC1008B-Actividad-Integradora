@@ -5,10 +5,15 @@ import matplotlib.animation as animation
 from stack_robots_model import StorageModel
 
 max_exec_time = 1
-model = StorageModel(5, 5, 25)
+model = StorageModel(15, 15, 25)
 
-for i in range(100):
+init_time = time.time()
+while model.boxes_available() or time.time() - init_time > max_exec_time:
     model.step()
+model.drop_boxes()
+end_time = time.time()
+
+exec_time = end_time - init_time
 
 data = model.datacollector.get_model_vars_dataframe()
 
