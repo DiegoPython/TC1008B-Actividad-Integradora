@@ -8,7 +8,7 @@ max_exec_time = 1
 model = StorageModel(15, 15, 25)
 
 init_time = time.time()
-while model.boxes_available() or time.time() - init_time > max_exec_time:
+for i in range(10):#while model.boxes_available() or time.time() - init_time > max_exec_time:
     model.step()
 model.drop_boxes()
 end_time = time.time()
