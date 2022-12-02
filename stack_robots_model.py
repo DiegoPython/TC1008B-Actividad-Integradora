@@ -68,19 +68,17 @@ class RobotAgent(mesa.Agent):
         self.model.grid.move_agent(self, new_position)
 
     def move_to_target(self):
-        mov_x = self.target_pos[0] - self.pos[0]
-        mov_y = self.target_pos[1] - self.pos[1]
+        mov_x = np.sign(self.target_pos[0] - self.pos[0])
+        mov_y = np.sign(self.target_pos[1] - self.pos[1])
 
-        next_x = self.pos[0] + (1 * np.sign(mov_x))
-        next_y = self.pos[1] + (1 * np.sign(mov_y)) 
+        #Priorizamos el moviento en el eje x
+        if mov_x != 0:
+            mov_y = 0
 
-        if mov_x != 0 and mov_y != 0:
-            self.moves += 1
+        next_x = self.pos[0] + mov_x
+        next_y = self.pos[1] + mov_y
+
         self.moves += 1
-
-        if (next_x, next_y) == self.target_pos:
-            self.target_pos = None
-
         self.model.grid.move_agent(self, (next_x, next_y))
 
     def find_boxes(self):
@@ -96,8 +94,10 @@ class RobotAgent(mesa.Agent):
                 print(neighbor.pos)
                 self.target_pos = neighbor.pos
                 neighbor.target = True
+                print(neighbor.target)
                 break
 
+        print(self.target_pos)
         if self.target_pos != None:
             self.move_to_target()
         else:
